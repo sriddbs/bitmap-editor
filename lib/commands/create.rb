@@ -1,3 +1,5 @@
+require_relative '../bitmap.rb'
+
 class Create
   class << self
     def execute(argument, bitmap)

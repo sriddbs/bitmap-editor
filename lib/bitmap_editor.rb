@@ -1,16 +1,39 @@
+require_relative '../lib/commands/create.rb'
+require_relative '../lib/commands/clear.rb'
+require_relative '../lib/commands/color.rb'
+require_relative '../lib/commands/vertical.rb'
+require_relative '../lib/commands/horizontal.rb'
+require_relative '../lib/commands/show.rb'
+require_relative '../lib/file_reader.rb'
+
 class BitmapEditor
 
-  def run(file)
-    return puts "please provide correct file" if file.nil? || !File.exists?(file)
+  def initialize
+    @commands = {
+      'I' => Create,
+      'C' => Clear,
+      'L' => Color,
+      'V' => Vertical,
+      'H' => Horizontal,
+      'S' => Show
+    }
+  end
 
-    File.open(file).each do |line|
-      line = line.chomp
-      case line
-      when 'S'
-          puts "There is no image"
+  def run(file_path)
+    commands = FileReader.new(file_path).parse
+    bitmap = nil
+
+    commands.each do |command, argument|
+      if bitmap.nil? && command != 'I'
+        puts !@commands[command].nil? ? "No image" : "Invalid command"
+      elsif @commands[command].nil?
+        puts "unrecognised command #{command}"
+      elsif !@commands[command].valid?(argument, bitmap)
+        puts "Invalid argument #{argument} for #{command}"
       else
-          puts 'unrecognised command :('
+        bitmap = @commands[command].execute(argument, bitmap)
       end
     end
+
   end
 end
