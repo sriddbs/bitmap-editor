@@ -15,4 +15,35 @@ describe Bitmap do
       expect(@bitmap.matrix.map { |e| e }.flatten.uniq).to eql(["O"])
     end
   end
+
+  let(:bitmap2x2) { Bitmap.new(2, 2)}
+  let(:bitmap2x3) { Bitmap.new(2, 3)}
+
+  describe '#reset' do
+    it 'clears the 2x2 matrix to original state' do
+      bitmap2x2.matrix = [['C', 'C'], ['C', 'C']]
+      new_bitmap = Bitmap.new(2, 2)
+
+      expect(bitmap2x2.reset).to eq(new_bitmap)
+    end
+
+    it 'clears the 2x3 matrix to original state' do
+      bitmap2x3.matrix = [['C', 'C'], ['C', 'C'], ['O', 'O']]
+      new_bitmap = Bitmap.new(2, 3)
+
+      expect(bitmap2x3.reset).to eq(new_bitmap)
+    end
+  end
+
+  describe '#==' do
+    it 'not equals when 2 matrices are not the same side' do
+      expect(bitmap2x2).not_to eq(bitmap2x3)
+    end
+
+    it 'equals when 2 matrices are the same side' do
+      new_bitmap = Bitmap.new(2, 2)
+
+      expect(bitmap2x2).to eq(new_bitmap)
+    end
+  end
 end
