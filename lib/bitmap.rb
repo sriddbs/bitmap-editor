@@ -1,5 +1,5 @@
 class Bitmap
-  attr_reader :columns, :rows, :matrix
+  attr_accessor :columns, :rows, :matrix
 
   def initialize(columns, rows)
     @columns = columns
@@ -10,5 +10,9 @@ class Bitmap
   def ==(other)
     raise "Object is not Bitmap #{other.class}" if self.class != other.class
     self.matrix == other.matrix
+  end
+
+  def reset
+    Bitmap.new(columns, rows)
   end
 end
